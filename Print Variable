@@ -1,0 +1,6 @@
+day = 6
+print "03 - %s - 2019" %  (day)
+# 03 - 6 - 2019
+print "03 - %02d - 2019" % (day)
+# 03 - 06 - 2019
+# The 0 means "pad with zeros", the 2 means to pad to 2 characters wide, and the d means the number is a signed integer
