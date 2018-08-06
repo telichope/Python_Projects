@@ -1,5 +1,23 @@
 function
 
+def biggest_number(*args): #Multiple arguments
+  print max(args)
+  return max(args)
+    
+def smallest_number(*args):
+  print min(args)
+  return min(args)
+
+
+
+
+
+
+
+
+
+
+
 def hotel_cost(nights):
     return 140*nights
     
