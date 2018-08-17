@@ -1,0 +1,37 @@
+import os
+import shutil
+
+srcpath = 'C:\\Users\\wendong.tang\\Desktop\\Python\\'
+destpath = 'C:\\Users\\wendong.tang\\Desktop\\Python\\DED\\'
+
+# for files in os.listdir(srcpath):
+#     for file in files:
+#         print (file)
+
+        # if not os.path.isdir(destpath):
+        #     os.makedirs(destpath)
+        # shutil.move(os.path.join(root, file), destpath)
+
+
+
+print("Path at terminal when executing this file")
+print(os.getcwd() + "\n")
+
+print("This file path, relative to os.getcwd()")
+print(__file__ + "\n")
+
+print("This file full path (following symlinks)")
+full_path = os.path.realpath(__file__)
+print(full_path + "\n")
+
+print("This file directory and name")
+path, filename = os.path.split(full_path)
+print(path + ' --> ' + filename + "\n")
+
+print("This file directory only")
+print(os.path.dirname(full_path))
+
+
+test=chr(255)
+print (test)
+print(len(test.encode()))
