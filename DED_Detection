@@ -1,0 +1,74 @@
+import os
+import shutil
+import datetime
+import pyodbc
+import subprocess
+
+cnxn = pyodbc.connect('Driver={SQL Server Native Client 11.0};SERVER=******;DATABASE=******;Trusted_Connection=yes')
+
+cursor = cnxn.cursor()
+
+
+def isascii(fst_l,fnm):
+    if fst_l != fnm:
+        try:
+            l=firstline.encode()
+            if len(firstline) == len(firstline.encode()):
+                return True
+            else:
+                return False
+        except UnicodeDecodeError:
+            return False
+
+
+def fstl_read(path,fnm):
+    try:
+        with open(path+""+fnm+"") as f:
+            first_line = f.readline()
+            return first_line
+    except UnicodeDecodeError:
+        return fnm
+
+
+env='****_uat02'
+server= env.replace("_","sql")
+srcpath = '\\\\%s\\%s\\Processing\\' % (server,env)
+destpath = '\\\\%s\\%s\\Processing\\DED\\' % (server,env)
+log=open("D:\\Custom_Scripts\\Log\\%s_DED_Log.txt" % env,'a')
+
+if not os.path.isdir(destpath):
+    os.makedirs(destpath)
+for root, subFolders, files in os.walk(srcpath):
+    for file in files:
+        if root==srcpath:
+            print ('\n')
+            print(datetime.datetime.now())
+            log.write(str(datetime.datetime.now()))
+            print ('\n'+"Checking "+file)
+            log.write('\n'+"Checking "+file)
+            if ".csv" in file:
+                firstline = fstl_read(srcpath, file)
+                print ("    Reading 1st line from "+file)
+                log.write('\n'+"    Reading 1st line from "+file)
+                if not isascii(firstline, file):
+                    shutil.move(os.path.join(srcpath, file), os.path.join(destpath, file))
+                    print ('\n'+"    DED detected. Moving "+file)
+                    log.write('\n'+"    DED detected. Moving "+file)
+                    cursor.execute("INSERT INTO [*******].[dbo].[ded_detection](client,directory, filename, insert_timestamp) values (?,?,?,getdate())"
+                                  ,env
+                                   ,destpath
+                                   ,file
+                                   )
+                    cnxn.commit()
+                else:
+                     print ("    %s is fine" %file)
+                     log.write('\n'+"    %s is fine" %file)
+
+            else:
+                print ("    Non-csv. Pass "+file)
+                log.write('\n'+"    Non-csv. Skip "+file)
+            print('\n')
+            log.write('\n'*2)
+cnxn.close() 
+
+
