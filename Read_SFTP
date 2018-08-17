@@ -1,0 +1,37 @@
+import os
+import datetime
+
+
+clinical=['Allergy','Appointment','Assessment','Charge','Encounter','Immunization','Maintenance','Medicationlist','Order','Patient','Payer','Prescription','Problem','Provider','Result','Vitals']
+filecount={}
+mtime=[]
+totalcount=0
+
+for a in clinical:
+    filecount[a]=0
+
+path = '\\\\****01\\1464-*****_SFTP_uat\\'
+print ("\nChecking "+path)
+
+for root, subFolders, files in os.walk(path):
+    if root == path:
+        for file in files:
+            for t in clinical:
+                if t.lower() in file.lower():
+                    filecount[t] += 1
+            modifydate=str(datetime.date.fromtimestamp(os.path.getmtime(path+file)))
+            mtime.append(modifydate)
+            totalcount+=1
+            #print (datetime.date.fromtimestamp(os.path.getmtime(path+file)))
+print ("\nCount by Name:")
+for k in filecount:
+    print (k+": "+str(filecount[k]))
+
+
+mtimecount=dict((x,mtime.count(x)) for x in set(mtime))
+print ("\nCount by Modify Date:")
+for k in mtimecount:
+    print (k+": "+str(mtimecount[k]))
+
+
+print ("\nTotal Count: "+str(totalcount))
