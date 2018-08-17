@@ -1,0 +1,64 @@
+import pyodbc
+import subprocess
+
+cnxn = pyodbc.connect('Driver={SQL Server Native Client 11.0};SERVER=********;DATABASE=**********;Trusted_Connection=yes')
+
+cursor = cnxn.cursor()
+
+
+while True:
+    print "...\n"
+    client=raw_input("Please type in client acronym:      ")
+
+    cursor.execute("select from")
+    result=cursor.fetchall()
+#    cursor.close()
+    if any(str(x[0]).lower()==client.lower() for x in result):
+        True
+    else:
+        print "Client not found! (For prestaging SFTP, please use PRS as cient)"
+        break
+        
+
+   
+
+    
+    source=raw_input("Please type in source acronym:      ")
+
+    cursor.execute("select from")
+    result=cursor.fetchall()
+#    cursor.close()
+    if any(str(x[0]).lower()==source.lower() for x in result):
+        True
+    else:
+        print "Source not found! (For Prestaging SFTP, please try add/remove PR-)"
+        break
+
+    
+    env=raw_input("Please type in environment acronym: ")
+    cursor.execute("select from")
+    result=cursor.fetchall()
+#    cursor.close()
+    if any(str(x[0]).lower()==env.lower() for x in result):
+        True
+    else:
+        print "Environment not found!"
+        break
+
+    cursor.execute("select from")
+
+
+    result=list(cursor.fetchall())
+    string=str(result[0][0])
+
+#    cursor.close()
+
+    print "...\n"
+    print "Opening "+string+env
+    subprocess.call("explorer "+string+env, shell=True)
+
+    #subprocess.Popen(r'explorer /select,"\\\\*******01\\0173-*****_SFTP_prd01"')
+    #subprocess.call("explorer \\\\*****01\\0173-*****_SFTP_prd01", shell=True)
+    print '\n'*2
+
+
